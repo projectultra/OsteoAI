@@ -5,7 +5,7 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Build the React app
-COPY . .
+COPY package.json package-lock.json ./
 # Install Node.js dependencies
 RUN npm install
 RUN npm run build
@@ -19,8 +19,9 @@ WORKDIR /app
 # Copy Flask dependencies and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY app.py .
-COPY mobile_net.keras .
+RUN mkdir -p src/upload
+
+COPY . .
 
 # Copy the built React app from the previous stage
 COPY --from=build /app/build /app/build
