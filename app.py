@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import tensorflow as tf
 from flask_cors import CORS
 from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
@@ -8,7 +8,9 @@ import numpy as np
 from werkzeug.utils import secure_filename
 import os
 
+app = Flask(__name__, static_folder='react-app/build', static_url_path='')
 app = Flask(__name__)
+
 CORS(app)
 # Load the pre-trained TensorFlow model
 model = load_model('mobile_net.keras')
@@ -99,5 +101,15 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Serve React app's static files
+@app.route('/')
+def serve_react_app():
+    return send_from_directory(app.static_folder, 'index.html')
+
+# Serve static files for any other route
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
