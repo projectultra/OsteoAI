@@ -35,7 +35,7 @@ function App() {
     formData.append('image', file);
     
     try {
-      const uploadResponse = await axios.post('http://localhost:5000/upload', formData, {
+      const uploadResponse = await axios.post('https://osteoai-hsbgbsepgxfzdgf5.eastus-01.azurewebsites.net/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -43,7 +43,7 @@ function App() {
 
       const filePath = uploadResponse.data.file_path;
       
-      const predictResponse = await axios.post('http://localhost:5000/predict', { file_path: filePath });
+      const predictResponse = await axios.post('https://osteoai-hsbgbsepgxfzdgf5.eastus-01.azurewebsites.net/predict', { file_path: filePath });
       const modelsData = predictResponse.data.models;
       
       const formattedPredictions = modelsData.map((model, index) => {
