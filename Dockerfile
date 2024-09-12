@@ -33,7 +33,7 @@ COPY . .
 COPY --from=build /app/build /app/build
 
 # Expose port for Flask
-EXPOSE 5000
+EXPOSE 8000
 
 # Command to run Flask
 CMD ["python", "app.py"]
