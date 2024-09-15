@@ -45,13 +45,14 @@ function App() {
       
       const predictResponse = await axios.post('https://osteoai-hsbgbsepgxfzdgf5.eastus-01.azurewebsites.net/predict', { file_path: filePath });
       const modelsData = predictResponse.data.models;
-      
+      const modelNames = ['MobileNet V3', 'EfficientNet V2', 'VGG19', 'Ensembled'];
+
       const formattedPredictions = modelsData.map((model, index) => {
         const probabilities = Array.isArray(model.Probabilities) ? model.Probabilities : [];
         const predictedClass = model.Predicted_Class || 'Model not available';
         
         return {
-          model: `Model ${index + 1}`,
+          model: modelNames[index] || `Model ${index + 1}`,
           predictedClass: predictedClass,
           probabilities: probabilities,
           winningClass: predictedClass !== 'Model not available' ? CLASS_NAMES[probabilities.indexOf(Math.max(...probabilities))] : 'N/A'
